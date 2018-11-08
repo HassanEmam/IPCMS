@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Roles
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-8">
+        <h1> {{ organisation_name }} Users List</h1>
+
+        {% include '_flashmessages.html' %}
+        <div style="overflow-x:auto;">
+        <table class='table table-hover table-responsive'>
+            <tr>
+                <th>User Name</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        {% for user in users %}
+            <tr>
+                <td><a href ="{{ url_for('view_user' , id= user.id) }}">{{ user.username }}</a></th>
+                </td>
+                <td>{{ user.firstname }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                <a data-target="#confirm-restore" data-toggle="modal" data-href="{{ url_for('restore_user', id = user.id) }} "><img title="Restore" src="{{ url_for('static', filename='img/restore.png') }}" style="width:20px;height:20px;" alt="Restore"/> </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+        </div>
+        <a href= {{ url_for('register') }} class='btn btn-success'> New User </a>
+        <a href= {{ url_for('newuserprojectassignment') }} class='btn btn-success'>Assign Projects</a>
+    </div>
+
+<div class="modal fade" id="confirm-restore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Restore</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>You are about to restore one record, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                    <p class="debug-url"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <a class="btn  btn-success btn-ok">Restore</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(document).ready(function() {
+  $('#confirm-restore').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+});
+</script>
+{% endblock %}

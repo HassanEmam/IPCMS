@@ -1,0 +1,7 @@
+/venv/*
+/migrations/*
+/.idea/*
+*.pyc
+*.sql
+settings.py
+wsgi.py

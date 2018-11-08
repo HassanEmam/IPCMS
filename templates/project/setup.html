@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - New Project
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-6">
+        <h1>Create New Project</h1>
+        <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" /> 
+
+<!--Font Awesome (added because you use icons in your prepend/append)-->
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+        <style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
+
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field %}
+        {% if action=='new' %}
+        <form method="POST" action = {{ url_for('newproject') }} role ="form">
+        {% else %}
+        <form method="POST" action={{ url_for('edit_project', project_id= project.id)  }} role="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        {{ render_field(form.code, class="form-control") }}
+        {{ render_field(form.name, class="form-control") }}
+        <!-- {{ render_field(form.start, class="form-control") }}
+        {{ render_field(form.finish, class="form-control") }} -->
+        <div class="form-group ">
+      <label>Start Date</label>
+      <div class="input-group">
+       <div class="input-group-addon">
+        <i class="fa fa-calendar">
+        </i>
+       </div>
+        <input class="form-control" id="start" name="start" placeholder="DD-MM-YYYY" type="text" {% if action=='edit' %} value= {{ project.start.strftime('%d/%m/%Y') }} {% endif %} />
+</div>
+     </div>
+            </td>
+            <td>
+            <div class="form-group ">
+      <label>Finish Date</label>
+              <div class="input-group">
+               <div class="input-group-addon">
+                <i class="fa fa-calendar">
+                </i>
+               </div>
+               <input class="form-control" id="finish" name="finish" placeholder="DD/MM/YYYY" type="text" {% if action=='edit' %} value= {{ project.finish.strftime('%d/%m/%Y') }} {% endif %} />
+              </div>
+             </div>
+            </td>
+        {{ render_field(form.description, class="form-control") }}
+        {{ render_field(form.cycle, class="form-control") }}
+        {{ render_field(form.status, class="form-control") }}
+
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+</div>
+
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+<script>
+    $(document).ready(function(){
+        var date_input=$('input[name="start"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+</script>
+
+<script>
+    $(document).ready(function(){
+        var date_input=$('input[name="finish"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    })
+</script>
+{% endblock %}

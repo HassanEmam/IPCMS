@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-8">
+        <h1>Weekly Work Plan</h1>
+        <h3>Section: {{wwp.section}}</h3>
+        <h3>Week Commencing {{wwp.reportingdate}}</h3>
+        
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field_nolabel %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('new_wwp_details', id= wwp.id) }} role ="form">
+        {% else %}<form method="POST" action ={{ url_for('edit_wwp_detail', w_id= detail.wwp_id, t_id = detail.task_id) }} role ="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        <div style="overflow-x:auto;">
+        <table class="table" id="wwp">
+        <tr>
+            <td>Activity</td>
+            <td>Responsible</td>
+            <td class="col-md-1">Mon</td>
+            <td class="col-md-1">Tue</td>
+            <td class="col-md-1">Wed</td>
+            <td class="col-md-1">Thu</td>
+            <td class="col-md-1">Fri</td>
+            <td class="col-md-1">Sat</td>
+            <td class="col-md-1">Sun</td>
+            {% if action=='update' %}
+            <td>Reason</td>
+            {% endif %}
+            <td>Active</td>
+            {%if action=='new' %}
+            <td>Actions</td>{% endif %}
+        </tr>
+        <tr class="tr_clone">
+            <td>{%if action=='new' %} {{ render_field_nolabel(form.task, class="form-control") }}
+            {% else %} {{ detail.task }}
+            {% endif %}
+            </td>
+            <td>{{ render_field_nolabel(form.user, class="form-control") }}</td>
+            <td>
+                <input class="form-control" id="mon" name="mon" type="checkbox" value='1'>
+                <input type="hidden" name="mon" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="tue" name="tue" type="checkbox" value='1'>
+                <input type="hidden" name="tue" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="wed" name="wed" type="checkbox" value='1'>
+                <input type="hidden" name="wed" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="thu" name="thu" type="checkbox" value='1'>
+                <input type="hidden" name="thu" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="fri" name="fri" type="checkbox" value='1'>
+                <input type="hidden" name="fri" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="sat" name="sat" type="checkbox" value='1'>
+                <input type="hidden" name="sat" value="No"></div>
+            </td>
+            <td>
+                <input class="form-control" id="sun" name="sun" type="checkbox" value='1'>
+                <input type="hidden" name="sun" value="No"></div>
+            </td>
+            {% if action=='update' %}
+            <td>
+                {{ render_field_nolabel(form.delayreason, class="form-control") }}
+            </td>
+            {% endif %}
+            <td>{{ render_field_nolabel(form.is_active, class="form-control") }}</td>
+            {% if action=='new' %}
+            <td><a href="#" name="add" value="Add" class="tr_clone_add"><img height=20px src="{{url_for('static', filename='img/add.png')}}"></a>
+            <a href='#' name="remove"  class="tr_clone_remove"><img height=20px src="{{url_for('static', filename='img/delete.png')}}"></a></td>
+            {% endif %}            
+        </tr>
+        </table>
+        </div>
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $(document).on('click',"a.tr_clone_add", function() {
+    var $tr    = $(this).closest('.tr_clone');
+    var $clone = $tr.clone();
+    $clone.find(':text').val('');
+    $tr.after($clone);
+    $clone.get(0).scrollIntoView();
+});
+
+$(document).on('click',"a.tr_clone_remove", function(){
+    var $tr = $(this).closest('.tr_clone');
+    var $remove = $tr.remove();
+    
+})
+$('#wwp').dataTable( {
+	"paging":   false,
+	"info":     false,
+	"filter":     false,
+	"scrollX": true,
+	
+	"order": [[ 1, "desc" ]]
+} );
+});
+</script>
+{% endblock %}

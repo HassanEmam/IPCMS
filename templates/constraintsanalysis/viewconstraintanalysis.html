@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Constraint Analysis
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-12">
+        <h1>Constraint Analysis Activities  </h1>
+        <h3>Area {{constraintanalysis.section}}</h3>
+        <h3>Week Commencing {{constraintanalysis}}</h3>
+        <hr>
+        
+        {% include '_flashmessages.html' %}
+        
+        <h4>Activities</h4>
+        <div style="overflow-x:auto;">
+        <div style="overflow-x:auto;">
+        <table class='table table-hover table-responsive'>
+            <tr>
+                <th>Task</th>
+                {% for constraint in constraints %}
+                <th>{{ constraint.name }}</th>
+                {% endfor %}
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for task in tasks %}
+            <tr>
+            <td style="min-width:15em;">{{ task.task }}</td>
+                {% for d in details.filter_by(task_id= task.task_id).all() %}
+                <td>
+                {% if d.status %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+                </td>
+                {% endfor %}
+            <td>{{ task.status}}</td>
+            <td>
+                <a data-target="#confirm-delete" data-toggle="modal" data-href={{ url_for('delete_constraintanalysis_detail', task_id = task.task_id, ca_id= constraintanalysis.id) }} ><img title="Delete" src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+                <a href={{ url_for('edit_constraintanalysis_detail', task_id = task.task_id, ca_id= constraintanalysis.id) }}><img title="Edit" src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+            </td>
+            </tr>
+
+            {% endfor %}
+        </table>
+        </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+            
+                <div class="modal-body">
+                    <p>You are about to delete one record, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                    <p class="debug-url"></p>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(document).ready(function() {
+  $('#confirm-delete').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+});
+</script>
+
+
+{% endblock %}

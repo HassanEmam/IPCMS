@@ -1,0 +1,6 @@
+relationship_table=db.Table('relationship_table',                            
+                             db.Column('post_id', db.Integer,db.ForeignKey('posts.id'), nullable=False),
+                             db.Column('tags_id',db.Integer,db.ForeignKey('tags.id'),nullable=False),
+                             db.PrimaryKeyConstraint('post_id', 'tags_id') )
+ 
+

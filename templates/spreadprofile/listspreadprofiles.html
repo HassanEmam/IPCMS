@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Occult - Projects
+{% endblock %}
+
+{% block content %}
+    <div class ="col-md-4">
+        <h1>Spread Profiles</h1>
+        
+        {% include '_flashmessages.html' %}
+        <div style="overflow-x:auto;">
+        <table class='table table-hover table-responsive'>
+            
+        <tr>
+            <th>Profile Code</th>
+            <th>Profile Name</th>
+        </tr>
+        {% for profile in profiles %}
+        <tr>
+            <td>{{ profile.code }}</td>
+            <td>{{ profile.name }}</td>
+        </tr>
+        {% endfor %}
+        </table>
+        </div>
+    </div>
+{% endblock %}

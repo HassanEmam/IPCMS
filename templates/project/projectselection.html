@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Projects
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-8">
+        <h2> Project Selection</h2>
+
+        {% include '_flashmessages.html' %}
+
+        <form method="POST" action="{{ url_for('project_detail')  }}" enctype="multipart/form-data" role="form">
+        <div style="overflow-x:auto;">
+        <table align='center'>
+            <tr><th>Projects</th></tr>
+        {% for project in projects %}
+        <tr><td style="padding-top: 1em;">
+        <button type ="submit" name='submit' class="btn btn-primary" style="min-width:30em;" value="{{ project.id }}">{{ project.name }}</button><br>
+        </td></tr>
+        {% endfor %}
+
+        </table>
+        </div>
+    </div>
+{% endblock %}

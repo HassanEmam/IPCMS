@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-6">
+        <h1>Lookahead Form</h1>
+        
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('new_lookahead') }} role ="form">
+        
+        {% endif %}
+        {{ form.hidden_tag() }}
+        {{ render_field(form.reportingdate, class="form-control") }}
+        {{ render_field(form.section, class="form-control") }}
+        {{ render_field(form.is_active, class="form-control") }}
+
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

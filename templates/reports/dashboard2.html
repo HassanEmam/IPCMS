@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Assign User to Project
+{% endblock %}
+{%block ref %}
+<meta http-equiv="content-type" content="text/html; charset=UTF8">
+<link rel="stylesheet prefetch" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.4/dc.css">
+<style>
+	body, html {
+	height:100%;
+	margin: 0;
+	padding:0;
+	}
+	
+	div{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	display:block;
+	box-sizing: border-box;
+	}
+	
+	td{
+	border: 1px solid gainsboro;
+	}
+	
+	.info{
+	background-color: pink;
+	}
+	
+	div.row{
+		display:flex;
+		position:relative;
+		margin-left:0px;
+		margin-bottom:0;
+		
+	}
+	
+	div.column{
+		width:45%;
+		display:block;
+		float:left;
+		margin-left:1em;
+		margin-right:4em;
+		margin-top:2em;
+		margin-bottom:1em;
+		border-radius:2em;
+		text-align:center;
+		box-shadow: 12px 15px 10px 0px rgba(46,61,73,0.2);
+		border:none;
+	}
+	div.column:hover{
+		box-shadow:2px 4px 8px 0px rgba(46,61,73,0.3);
+	}
+	
+	.fullWidth{
+		width:96.4%;
+		display:block;
+		float:left;
+		margin-left:5px;
+		margin-right:0px;
+		margin-top:5px;
+		box-shadow: 12px 15px 20px 0px rgba(46,61,73,0.15);
+		border-radius:2em;
+		text-align:center;
+		border:none;
+	}
+	.fullWidth:hover{
+		box-shadow:2px 4px 8px 0px rgba(46,61,73,0.2);
+	}
+	#tasks{
+		display:block;
+		
+	}
+	
+	h2{
+		margin-top:0px;
+		background-color:LightBlue ;
+		text-align:center;
+		border-top-left-radius: 1em;
+		border-top-right-radius: 1em;
+	}
+	
+	table{
+		border-collapse: collapse;
+		margin:0 auto;
+		border-radius:2em;
+		
+	}
+	
+	table tbody tr:hover{
+	background-color: lightblue;
+	cursor:pointer;
+	}
+	
+	table thead tr {
+	
+	background-color: steelblue;
+	line-height: 2;
+	color:white;
+	}
+	th{
+		text-align:center;
+	}
+	table tbody tr td,
+	table thead tr td{
+		width:20%;
+		text-align:center;
+	}
+	
+	@media screen and (max-width:800px){
+	div.row{
+		display:flex;
+		flex-direction:column;
+		margin-left:0px;
+	}
+	div.column{
+		width:97%;
+		display:block;
+		text-align:center;
+		margin-left:0px;
+	}
+	#tasks{
+		display:none;
+	}
+	table{
+		display:none;
+	}
+	}
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="column" id="chart-line-hitsperday">
+	<h2>PPC Chart</h2>
+	<span class="reset" style="display:none;background-color:lightgray;">Selection: <span class="filter"></span></span>
+		<a class="reset btn btn-success" style="display:none;" href="javascript: hitslineChart.filterAll(); dc.redrawAll();">reset</a>
+	</div>
+	<div class="column" id="chart">
+	<h2>Sections</h2><span class="reset" style="display:none; background-color:lightgray;">Selection: <span class="filter"></span></span>
+	<a class="reset btn btn-success" style="display:none; text-decoration:none;" href="javascript:piChart.filterAll(); dc.redrawAll();">reset</a>
+	</div>
+</div>
+<div class="row">
+	<div class="column" id="reasons-chart">
+		<h2>Delay Causes Analysis</h2>
+		<span class="reset" style="display:none; background-color:lightgray;">Selection: <span class="filter"></span></span>
+		<a class="reset btn btn-success" style="display:none;" href="javascript:makedata.reasonsChart.filterAll(); dc.redrawAll();">reset</a>
+	</div>
+	<div class="column" id="managers-chart"><h2>Responsible Managers</h2>
+	<span class="reset" style="display:none; background-color:lightgray;">Selection: <span class="filter"></span></span>
+		<a class="reset btn btn-success" style="display:none;" href="javascript:managerChart.filterAll(); dc.redrawAll();">reset</a>
+	</div>
+	
+</div>
+<div class="row">
+	<div class="fullWidth" id="tasks" >
+		<h2>Tasks Table</h2>
+		<span class="filter-count"></span>
+		
+		<table id="tasks-table"></table>
+	</div>
+	
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.0/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.4/dc.min.js"></script>
+
+<script>
+
+
+queue()
+    .defer(d3.json, "{{ url_for('get_data') }}")
+    .await(makeGraphs);
+
+function makeGraphs(error, data) {
+	var months = new Array(12);
+	months[0] = "Jan";
+	months[1] = "Feb";
+	months[2] = "Mar";
+	months[3] = "Apr";
+	months[4] = "May";
+	months[5] = "Jun";
+	months[6] = "Jul";
+	months[7] = "Aug";
+	months[8] = "Sep";
+	months[9] = "Oct";
+	months[10] = "Nov";
+	months[11] = "Dec";
+	
+	
+	// var parseDate = d3.time.format("%d/%m/%Y").parse;
+	// data.forEach(function(d) {
+	// //this function is used to parse dates
+	// 	d.date = parseDate(d.date);
+	// });
+	
+	//console.log(data);
+	var all_tasks = [];
+	//this function can be used to flattern the data
+		data.forEach(function(d) {
+		    d.tasks.forEach(function(task) {
+		    	var tempDate= new Date(d.date);
+		    	d.date = tempDate;
+		        all_tasks.push({project: d.project, date:d.date, PPC: d.PPC, section:d.section, responsible: task.responsible, task_name: task.task_name, updated: task.updated, completed: task.completed, Reason: task.Reason});
+		    });
+		}); 
+	console.log(all_tasks);
+	var ndx = crossfilter(all_tasks);
+	var dateDim = ndx.dimension(function(d) { return d.date; });
+	var sectionDim = ndx.dimension(function(d) { return d.section});
+	var reasonDim = ndx.dimension(function(d) { return d.Reason});
+	var managerDim = ndx.dimension(function(d) { return d.responsible});
+	
+	var all = ndx.groupAll();
+	
+	
+	var counter = dc.dataCount('.filter-count')
+	    .dimension(ndx)
+	    .group(all);
+	    
+	counter.html({
+	     some: '%filter-count out of %total-count records selected <a class="reset btn btn-success" href="javascript:dc.filterAll(); dc.redrawAll();">Reset All</a>',
+	     all: 'All records selected. Click on charts to apply filters'
+	})
+	
+	
+	var hits = dateDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+	var sectionGroup = sectionDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+	var reasonGroup = reasonDim.group();
+	var managerGroup = managerDim.group().reduce(reduceAdd, reduceRemove, reduceInitial);
+	var minDate = dateDim.bottom(1)[0].date;
+	var maxDate = dateDim.top(1)[0].date;
+	
+	var hitslineChart = dc.barChart("#chart-line-hitsperday");
+	
+	//set histogram properties
+	hitslineChart
+		//.width(1000).
+		//.height(400)
+		.dimension(dateDim)
+		.group(hits)
+		.valueAccessor(function (p) {
+		    return p.value.average;
+		})
+		.elasticY(true)
+		.elasticX(true)
+		.xAxisPadding(7)
+		.xAxisPaddingUnit('day')
+		.centerBar(true)
+		.barPadding(0.2)
+		.outerPadding(0.2)
+		.title(function(d) {return d.key +": $"+ d.value;}) 
+		.renderTitle(true)
+		.yAxisLabel("PPC")
+		.x(d3.time.scale().domain([minDate,maxDate]))
+		.xUnits(d3.time.weeks);
+	
+		
+	var piChart = dc.pieChart("#chart")
+		//.width(600)
+		//.height(200)
+		//.radius(100)
+		//.innerRadius(80)
+		.label(function(d){ return d.key +" : "+ d.value;})
+		.renderLabel(true)
+		.legend(dc.legend().x(450).y(5).itemHeight(12).gap(5))
+		.title(function(d) {return d.key +" : "+ d.value;}) 
+		.colors(d3.scale.category10())
+		.transitionDuration(1500)
+		.valueAccessor(function (p) {
+		    return p.value.average;
+		})
+		
+		.title(function(d){ return d.value.average; })
+		//.label(function(d){return d.key+":"+ Math.round((d.value/sumofTotal)*100,0) +"%"; })
+		.renderLabel(false)
+		.dimension(sectionDim)
+		.group(sectionGroup);
+	
+	var reasonsChart = dc.rowChart("#reasons-chart");
+	reasonsChart
+		.dimension(reasonDim)
+		.group(reasonGroup)
+		.ordering(function(d) { return -d.value })
+		//.colors(['#6baed6'])
+		.elasticX(true)
+		.xAxis().ticks(4);
+	
+	var managerChart = dc.rowChart("#managers-chart");
+	managerChart
+		.dimension(managerDim)
+		.group(managerGroup)
+		.ordering(function(d) { return -d.value })
+		//.colors(['#6baed6'])
+		.elasticX(true)
+		.valueAccessor(function (p) {
+		    return p.value.average;
+		})
+		.xAxis().ticks(4);
+	
+	var dataTable = dc.dataTable("#tasks-table")
+		//.width(600)
+		//.height(300)
+		.dimension(dateDim)
+		.showGroups(false)
+		.group(function(d){return d;})
+		.columns([{label:'Date', format:function(d){return d.date.getDate()+'-'+ months[d.date.getMonth()]+ '-' + d.date.getFullYear()}},
+				{ label:'Description', format:function(d) { return d.task_name } },
+			'section',
+			'responsible',
+			'updated',
+			'completed'])
+		.sortBy(function(d){ return d.date;})
+		.order(d3.descending);
+	
+	dc.renderAll();
+	
+	function reduceAdd(p, v) {
+	    p.total += parseFloat(v.PPC);
+	    ++p.count;
+	    p.average = d3.round((p.total / p.count), 2);
+	    return p;
+	}
+	
+	function reduceRemove(p, v) {
+	    p.total -= parseFloat(v.PPC);
+	    --p.count;
+	    p.average = d3.round((p.total / p.count), 2);
+	    return p;
+	}
+	
+	function reduceInitial() {
+	    return {
+	        total: 0,
+	        count: 0,
+	        average: 0,
+	    };
+	}
+};
+</script>
+{% endblock %}

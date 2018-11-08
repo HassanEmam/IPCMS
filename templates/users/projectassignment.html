@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Assign User to Project
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-6">
+        <h1>Project User Roles Assignment</h1>
+        
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('newuserprojectassignment') }} role ="form">
+        {% else %} <form method="POST" action ={{ url_for('editusrprjassignment', prj_id= prj_id, user_id = user_id) }} role ="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        {{ render_field(form.user, class="form-control") }}
+        {{ render_field(form.role, class="form-control") }}
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

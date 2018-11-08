@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Organisations
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-5">
+        <h1>Organisations List</h1>
+        {% include '_flashmessages.html' %}
+        <div style="overflow-x:auto;">
+        <table>
+        
+        {% for organisation in organisations %}
+        <tr>
+        <th><a href ="{{url_for('edit_organisation', id= organisation.id) }}">{{ organisation.name }}</a></th>
+        </tr>
+        <tr><td>{{ organisation.description }}</td></tr>
+        {% endfor %}
+        </table>
+        </div>
+    </div>
+
+{% endblock %}

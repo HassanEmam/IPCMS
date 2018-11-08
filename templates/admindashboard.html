@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+	<h2>Admin Dashboard</h2>
+	{% include '_flashmessages.html' %}
+		<div class="container" style="margin-top:2em;">
+			<div class="row">
+				<div class="col-sm-2">
+					<a href="{{ url_for('register') }}" class="centered text-center">
+						<img src="{{ url_for('static',  filename='img/adduser.png') }}" title="Add New User" height=50em />
+						<div class="text-center">Add User</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_users') }}" class="centered text-center" >
+						<img src="{{ url_for('static',  filename='img/edituser.png') }}" title="Edit User Details" height=50em;/>
+						<div class="text-center">Edit User</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_users') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/deleteuser.png') }}" title="Delete User" height=50em;/>
+					<div class="text-center">Delete User</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_users') }}" class="centered text-center" >
+						<img src="{{ url_for('static',  filename='img/usermapping.png') }}" title="User Mapping" height=50em;/>
+						<div class="text-center">User Mapping</div>
+					</a>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="container" style="margin-top:2em;">
+			<div class="row">
+				<div class="col-sm-2">
+					<a href="{{ url_for('add_role') }}" class="centered text-center">
+						<img src="{{ url_for('static',  filename='img/addroles.png') }}" title="Add New Role" height=50em />
+						<div class="text-center">New Role</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_roles') }}" class="centered text-center" >
+						<img src="{{ url_for('static',  filename='img/editroles.png') }}" title="Edit Existing Role" height=50em;/>
+						<div class="text-center">Edit Role</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_roles') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/deleteroles.png') }}" title="Delete Roles" height=50em;/>
+					<div class="text-center">Delete Roles</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_roles') }}" class="centered text-center" >
+						<img src="{{ url_for('static',  filename='img/viewroles.png') }}" title="View Roles" height=50em;/>
+						<div class="text-center">View Roles</div>
+					</a>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="container" style="margin-top:2em;">
+			<div class="row">
+				<div class="col-sm-2" >
+					<a href="{{ url_for('add_cycle') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/calendaradd.png') }}" title="Add New Reporting Cycle" height=50em;/>
+					<div class="text-center">New Reporting Cycle</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_cycles') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/calendaredit.png') }}" title="Edit Reporting Cycle" height=50em;/>
+					<div class="text-center">Edit Reporting cycle</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_cycles') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/calendardelete.png') }}" title="Delete Reporting Cycle" height=50em;/>
+					<div class="text-center">Delete Reporting Cycle</div>
+					</a>
+				</div>
+			<div class="col-sm-2">
+					<a href="{{ url_for('view_cycles') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/calendarview.png') }}" title="View Reporting Cycles" height=50em/>
+					<div class="text-center">View Reporting Cycles</div>
+					</a>
+				</div>
+			</div>
+		</div>
+				<div class="container" style="margin-top:2em;">
+			<div class="row">
+				<div class="col-sm-2" >
+					<a href="{{ url_for('newproject') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/newproject.png') }}" title="Add New Project" height=50em;/>
+					<div class="text-center">New Project</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_projects') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/editproject.png') }}" title="Edit Project Details" height=50em;/>
+					<div class="text-center">Edit Project</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_projects') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/deleteproject.png') }}" title="Delete Project" height=50em;/>
+					<div class="text-center">Delete Project</div>
+					</a>
+				</div>
+			<div class="col-sm-2">
+					<a href="#" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/assignedusers.png') }}" title="Assigned Users to Project" height=50em/>
+					<div class="text-center">Assigned Users</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="container" style="margin-top:2em;">
+			<div class="row">
+				<div class="col-sm-2" >
+					<a href="{{ url_for('view_deleted_roles') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/recoverroles.png') }}" title="Restore Deleted Roles" height=50em;/>
+					<div class="text-center">Restore Roles</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_deleted_users') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/restoreuser.png') }}" title="Restore Deleted User" height=50em;/>
+					<div class="text-center">Restore User</div>
+					</a>
+				</div>
+				<div class="col-sm-2">
+					<a href="{{ url_for('view_deleted_projects') }}" class="centered text-center" >
+					<img src="{{ url_for('static',  filename='img/recoverproject.png') }}" title="Recover Deleted Project" height=50em;/>
+					<div class="text-center">Recover Project</div>
+					</a>
+				</div>
+			<div class="col-sm-2">
+					<a href="#" class="centered text-center" >
+					<img title="Backup Database" src="{{ url_for('static',  filename='img/dbbackup.png') }}" height=50em/>
+					<div class="text-center">Database Backup</div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+{% endblock %}

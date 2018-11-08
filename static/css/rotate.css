@@ -1,0 +1,42 @@
+.dataTable th {
+    word-wrap: break-word;
+}
+
+
+th.rotate {
+	height: 100px;
+	padding: 1px;
+	/*width: 20px !important;*/
+	font-weight: normal;
+             filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083);  /* IE6,IE7 */
+         -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+     -moz-transform: rotate(-90.0deg);  /* FF3.5+ */
+      -ms-transform: rotate(-90.0deg);  /* IE9+ */
+       -o-transform: rotate(-90.0deg);  /* Opera 10.5 */
+  -webkit-transform: rotate(-90.0deg);  /* Safari 3.1+, Chrome */
+          transform: rotate(-90.0deg);  /* Standard */
+          text-align: right;
+
+	padding: 1px;
+	/*width: 20px !important;*/
+	font-weight: normal;
+}
+
+.autoResizeImage {
+    max-width: 100%;
+    height: auto;
+    width: auto;
+}
+
+.centered {
+    margin-left: auto;
+    margin-right: auto;
+    display:block;
+
+}
+
+.text-center {
+    text-decoration:none;
+    color: #000000;
+    text-align:center;
+}

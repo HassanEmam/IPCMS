@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Spread Profile
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-4">
+        <h1>Spread Profile</h1>
+        
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('newspread') }} role ="form">
+        {% else %}<form method="POST" action="{{ url_for('edit_spread', spread_id= spread.id)  }}" enctype="multipart/form-data" role="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        {{ render_field(form.code, class="form-control") }}
+        {{ render_field(form.name, class="form-control") }}
+        {{ render_field(form.period1, class="form-control") }}
+        {{ render_field(form.period2, class="form-control") }}
+        {{ render_field(form.period3, class="form-control") }}
+        {{ render_field(form.period4, class="form-control") }}
+        {{ render_field(form.period5, class="form-control") }}
+        {{ render_field(form.period6, class="form-control") }}
+        {{ render_field(form.period7, class="form-control") }}
+        {{ render_field(form.period8, class="form-control") }}
+        {{ render_field(form.period9, class="form-control") }}
+        {{ render_field(form.period10, class="form-control") }}
+        {{ render_field(form.period11, class="form-control") }}
+        {{ render_field(form.period12, class="form-control") }}
+        {{ render_field(form.period13, class="form-control") }}
+        {{ render_field(form.period14, class="form-control") }}
+        {{ render_field(form.period15, class="form-control") }}
+        {{ render_field(form.period16, class="form-control") }}
+        {{ render_field(form.period17, class="form-control") }}
+        {{ render_field(form.period18, class="form-control") }}
+        {{ render_field(form.period19, class="form-control") }}
+        {{ render_field(form.period20, class="form-control") }}
+        <div id='message' class='message' style="color:red"></div>
+        <button type ="submit" id='btn' class="btn btn-success">Save</button>
+        
+        </form>
+    
+    </div>
+<script src="{{ url_for('static', filename='js/spread.js') }}"></script>
+{% endblock %}

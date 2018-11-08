@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-8">
+        <h1>Look Ahead Activities Form</h1>
+        <h3>Week Commencing {{lookahead}}</h3>
+        <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" /> 
+
+<!--Font Awesome (added because you use icons in your prepend/append)-->
+<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css" />
+
+        <style>.bootstrap-iso .formden_header h2, .bootstrap-iso .formden_header p, .bootstrap-iso form{font-family: Arial, Helvetica, sans-serif; color: black}.bootstrap-iso form button, .bootstrap-iso form button:hover{color: white !important;} .asteriskField{color: red;}</style>
+
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field_nolabel %}
+        <div class="bootstrap-iso">
+        <div class="container-fluid">
+        {% if action=='new' %}<form id="lhform" name='lhform' method="POST" action ={{ url_for('new_lookahead_details', id= lookahead.id) }} role ="form">
+        {% else %}<form id="lhform" method="POST" action= {{ url_for('edit_lookahead_detail', tid = task.id )  }} role="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        <div style="overflow-x:auto;">
+        <table id='constraints' class='dataTable display' cellspacing="0" width="100%">
+        <tr><th>ID</th><th>Name</th><th>Start</th><th>Finish</th><th>Active</th></tr>
+        <tr class="tr_clone">
+            <td>
+                <div class="form-group">
+                    <input class="form-control" id="task_code" name="task_code[0]" type="text" value="">
+                </div>
+                <!--{{ render_field_nolabel(form.task_code, class="form-control") }}</td>-->
+            <td>
+                <!--{{ render_field_nolabel(form.task_name, class="form-control") }}-->
+                <div class="form-group">
+                    <input class="form-control" id="task_name" name="task_name[0]" type="text" value="">
+                </div>
+            </td>
+            <td><!-- {{ render_field_nolabel(form.start, class="form-control") }} -->
+                <div class="form-group ">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                       </div>
+                       <input class="form-control datpick" id="start" name="start[0]" placeholder="DD/MM/YYYY" type="text"/>
+                    </div>
+                 </div>
+            </td>
+            <td><!-- {{ render_field_nolabel(form.finish, class="form-control") }}-->
+                <div class="form-group ">
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input class="form-control datpick" id="finish" name="finish[0]" placeholder="DD/MM/YYYY" type="text"/>
+                    </div>
+                </div>
+            </td>
+            <td>
+            <div class="form-group">
+              <input checked="" class="form-control" id="is_active" name="is_active[0]" type="checkbox" value="y">
+            </div>
+        </td>
+            {% if action=='new' %}
+                <td>
+                    <a href="#" id="addbtn" name="add" value="Add" class="tr_clone_add"><img id="add" height=20px src="{{url_for('static', filename='img/add.png')}}"></a>
+                    <a href='#' name="remove"  class="tr_clone_remove"><img height=20px src="{{url_for('static', filename='img/delete.png')}}"></a>
+                </td>
+            {% endif %}
+        </tr>
+        </table>
+        </div>
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+    </div>
+    </div>
+</div>
+
+</form>
+
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="http://underscorejs.org/underscore-min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+<script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+<script type="text/html" id="form_tpl">
+    <tr class="tr_clone">
+        <td>
+            <div class="form-group">
+                <input class="form-control" id="task_code<%= element.i %>" name="task_code[<%= element.i %>]" type="text" value="">
+            </div>
+        <td>
+            <div class="form-group">
+                <input class="form-control" id="task_name<%= element.i %>" name="task_name[<%= element.i %>]" type="text" value="">
+            </div>
+        </td>
+        <td>
+            <div class="form-group ">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                   </div>
+                   <input class="form-control datpick" id="start<%= element.i %>" name="start[<%= element.i %>]" placeholder="DD/MM/YYYY" type="text"/>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group ">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input class="form-control datpick" id="finish<%= element.i %>" name="finish[<%= element.i %>]" placeholder="DD/MM/YYYY" type="text"/>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="form-group">
+              <input checked="" class="form-control" id="is_active<%= element.i %>" name="is_active[<%= element.i %>]" type="checkbox" value="y">
+            </div>
+        </td>
+        
+       
+        {% if action=='new' %}
+            <td>
+                <a href="#" id="addbtn" name="add" value="Add" class="tr_clone_add"><img id='add' height=20px src="{{url_for('static', filename='img/add.png')}}"> </a>
+                <a href='#' id="remove" name="remove"  class="tr_clone_remove"><img height=20px src="{{url_for('static', filename='img/delete.png')}}"> </a>
+            </td>
+        {% endif %}
+    </tr>
+</script>
+<script>
+$(document).ready(function(){
+    
+    
+
+    $("form[name='lhform']").validate({
+        rules:
+        {
+            'task_code[0]': {required:true},
+            'task_name[0]': {required:true},
+            'start[0]':{required:true},
+            'finish[0]':{required:true}
+        }
+    });
+    var counter = 1;
+    _.templateSettings.variable = "element";
+    var tpl = _.template($("#form_tpl").html());
+    
+    $(document).on('click',"a.tr_clone_add", function() {
+        console.log("Clicked");
+        
+        var $tr = $(this).closest('.tr_clone');
+        
+        var tplData = {
+            i: counter
+        };
+        $tr.after(tpl(tplData));
+        console.log(counter);
+        $('input[name="start['+counter+']"]').rules("add", {
+            required: true
+        });
+        $('input[name="task_code['+counter+']"]').rules("add", {
+            required: true
+        });
+        $('input[name="task_name['+counter+']"]').rules("add", {
+            required: true
+        });
+        $('input[name="finish['+counter+']"]').rules("add", {
+            required: true
+        });
+        
+        var date_input=$('.datpick'); //our date input has the name "date"
+        var start_date ='#start' + counter ;
+        var start_el = $(start_date);
+        var finish_date ='#finish' + counter ;
+        var finish_el = $(finish_date);
+        console.log(start_date, start_el);
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        console.log(container);
+        start_el.datepicker({
+            format: 'dd/mm/yyyy',
+            //container: container,
+            todayHighlight: true,
+            autoclose: true,
+            
+        });
+        
+        finish_el.datepicker({
+            format: 'dd/mm/yyyy',
+            //container: container,
+            todayHighlight: true,
+            autoclose: true,
+            
+        });
+        counter += 1;
+    
+    });
+    $('body').on('focus',".datepick", function(){
+        $(this).datepicker();
+    });
+    
+    // $('.datpick').on('focus', function(){
+    // $(this).datepicker({
+    //         format: 'dd/mm/yyyy'
+    //     });
+    // $.extend($.datepicker,{_checkOffset:function(inst,offset,isFixed){return offset}});
+    // $(this).datepicker("show");
+    // });
+    
+    $(document).on('click',"a.tr_clone_remove", function(){
+        var $tr = $(this).closest('.tr_clone');
+        var $remove = $tr.remove();
+        counter -=1;
+    });
+});
+</script>
+
+<!--<script>-->
+<!--$(document).ready(function(){-->
+<!--    $(document).on('click',"a.tr_clone_add", function() {-->
+<!--    var $tr    = $(this).closest('.tr_clone');-->
+<!--    var $clone = $tr.clone();-->
+<!--    $clone.find(':text').val('');-->
+<!--    $tr.after($clone);-->
+<!--    $clone.get(0).scrollIntoView();-->
+<!--});-->
+
+<!--$(document).on('click',"a.tr_clone_remove", function(){-->
+<!--    var $tr = $(this).closest('.tr_clone');-->
+<!--    var $remove = $tr.remove();-->
+    
+<!--})-->
+<!--$('#constraints').dataTable( {-->
+<!--	"paging":   false,-->
+<!--	"info":     false,-->
+<!--	"filter":     false,-->
+<!--	"scrollX": true,-->
+	
+<!--	"order": [[ 1, "desc" ]]-->
+<!--} );-->
+<!--});-->
+<!--</script>-->
+
+
+
+<script>
+    $(document).ready(function(){
+        var date_input=$('input[name="start"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    });
+    
+    $('body').on('focus',"#start", function(){
+    $(this).datepicker({
+            format: 'dd/mm/yyyy'
+        })
+    });
+</script>
+
+<script>
+    $(document).ready(function(){
+        var date_input=$('input[name="finish"]'); //our date input has the name "date"
+        var container=$('.bootstrap-iso form').length>0 ? $('.bootstrap-iso form').parent() : "body";
+        date_input.datepicker({
+            format: 'dd/mm/yyyy',
+            container: container,
+            todayHighlight: true,
+            autoclose: true,
+        })
+    });
+    
+    $('body').on('focus',"#finish", function(){
+    $(this).datepicker({
+            format: 'dd/mm/yyyy'
+        })
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Inbox</h1>
+    {% include '_flashmessages.html' %}
+    <div class ="col-md-8">
+    <table class="table table-hover table-responsive" id="rowclick2">
+        <tr>
+            <th>Sender</th>
+            <td>{{message.sender}}</td>
+        </tr><tr>
+            <th>Received on</th>
+            <td>{{message.timestamp.strftime('%d-%m-%Y %H:%M')}}</td>
+        </tr>
+
+        <tr>
+            <td>To:</td>
+            <td>{{message.recipient }}</td>
+        </tr><tr>
+            <td>Subject</td>
+            <td>{{message.subject }}</td>
+
+        </tr><tr>
+            <td>Body</td>
+            <td>{{message.body }}</td>
+
+        </tr>
+
+    </table>
+    <a href="{{ url_for('readmessage', id=message.id) }}" id="markread" class="btn btn-success">Mark Read</a>
+    <a data-target="#confirm-delete" data-toggle="modal" data-href="{{ url_for('deletemessage', id = message.id) }} "><img title="Delete" src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+    </div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>You are about to delete one record, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                    <p class="debug-url"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+$(document).ready(function() {
+  $('#confirm-delete').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+});
+</script>
+{% endblock %}

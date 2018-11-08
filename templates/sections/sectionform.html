@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-4">
+        <h1>Section Form</h1>
+        
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('new_section') }} role ="form">
+        {% else %}<form method="POST" action={{ url_for('edit_section', id= section.id)  }} enctype="multipart/form-data" role="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        {{ render_field(form.code, class="form-control") }}
+        {{ render_field(form.name, class="form-control") }}
+        {{ render_field(form.parent, class="form-control") }}
+
+        {{ render_field(form.active, class="form-control") }}
+
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-8">
+        <h1>Reporting Cycle Form</h1>
+          
+        {% include '_flashmessages.html' %}  
+          
+        {% from '_formhelpers.html' import render_field %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('add_cycle') }} role ="form">
+        {% else %}<form method="POST" action="{{ url_for('edit_cycle', id= cycle.id)  }}" enctype="multipart/form-data" role="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        {{ render_field(form.code, class="form-control") }}
+        {{ render_field(form.name, class="form-control") }}
+        {{ render_field(form.cycle_type, class="form-control") }}
+        {{ render_field(form.cycle_value, class="form-control") }}
+        {{ render_field(form.week_start, class="form-control") }}
+        {{ render_field(form.is_active, class="form-control") }}
+
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

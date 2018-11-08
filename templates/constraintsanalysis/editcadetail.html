@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Constraint Analysi
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-10">
+        <h1>Edit Constraint Analysis Form</h1>
+        
+        {% include '_flashmessages.html' %}
+        
+        {% from '_formhelpers.html' import render_field_nolabel %}
+        <form method="POST" action= {{ url_for('edit_constraintanalysis_detail', task_id = task.id, ca_id= constraintanalysis.id )  }} role="form">
+        <br>
+        {{ form.hidden_tag() }}
+        <div style="overflow-x:auto;">
+        <table class='dataTable display' id='constraints'>
+        <tr><th>Name</th>
+        {% for constraint in constraints %}
+            <th class="rotate" style="vertical-align: middle;text-align: left"><div>{{constraint}}</div></th>
+            {% endfor %}
+            <th>Can do</th>
+            <th>active</th>
+        <tr><td style="min-width:150px">{{ task }}</td>
+            {% for constraint in constraints %}
+            <td><div class="form-group">
+            <input class="form-control" id="{{constraint.id}}" name="{{constraint.id}}" type="checkbox" value='1'>
+            <input type="hidden" name="{{constraint.id}}" value="No"></div>
+            </td>
+            {% endfor %}
+            <td><div class="form-group">
+                {{ render_field_nolabel(form.can_do, class="form-control") }}
+            <input type="hidden" name="can_do" value="No"></div>
+            </td>
+            <td>{{ render_field_nolabel(form.is_active, class="form-control") }}</td>
+            
+        </tr>
+        </table>
+        </div>
+        <button type ="submit" class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+</div>
+<script>
+$(document).ready(function(){
+    $(document).on('click',"input.tr_clone_add", function() {
+    var $tr    = $(this).closest('.tr_clone');
+    var $clone = $tr.clone();
+    $clone.find(':text').val('');
+    $tr.after($clone);
+});
+});
+</script>
+{% endblock %}

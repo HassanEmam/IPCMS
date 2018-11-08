@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Reporting Cycles
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class ="col-md-10">
+        <h1>Weekly Work Plan Activities  </h1>
+        <h3>Area {{wwp.section}}</h3>
+        <h3>Week Commencing {{wwp}}</h3>
+        <hr>
+        {% include '_flashmessages.html' %}
+        {% from '_formhelpers.html' import render_field_nolabel %}
+        {% if action=='update' %}<form method="POST" action ={{ url_for('update_wwp_details', id= wwp.id) }} role ="form">
+        {% endif %}
+        <h4>Activities</h4>
+        <div class="imageTable">
+        <div style="overflow-x:auto;">
+        <table class='table table-hover table-responsive'>
+            <tr>
+                <th>Task</th>
+                <th>Responsible</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri. </th>
+                <th>Sat</th>
+                <th>Sun</th>
+                
+                <th>Completed</th>
+                <th>Delay Reason</th>
+            </tr>
+            {% for task in wwpdetails %}
+            <tr>
+            <td style="width:25%">{{ task.task }}</td>
+            <td> {{ task.user }} </td>
+            <td>
+                {% if task.mon %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} />
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} />
+                {% endif %}
+            </td>
+            <td>
+                {% if task.tue %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.wed %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.thu %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.fri %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.sat %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            <td>
+                {% if task.sun %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/True.png') }} >
+                {% else %}
+                <img class="img-responsive" src={{ url_for('static',  filename='img/False.png') }} >
+                {% endif %}
+            </td>
+            
+            <td>
+                <input class="form-control" id="status" name="status" type="checkbox" value='1'>
+                <input type="hidden" name="status" value="No">
+                </td>
+            <td>{{ render_field_nolabel(form.delayreason, class="form-control") }}</td>
+            </tr>
+            </div>
+            {% endfor %}
+        </table></div>
+        </div>
+        <input class="btn btn-success" type="submit" name="Save Updates"/>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

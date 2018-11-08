@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Roles
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-8">
+        <h1> {{ organisation_name }} Deleted Roles List</h1>
+
+        {% include '_flashmessages.html' %}
+        <div style="overflow-x:auto;">
+        <table class='table table-hover table-responsive'>
+        <tr>
+            <th>Role Name</th>
+            <th>Reports to</th>
+            <th>Active</th>
+            <th>Actions</th>
+        </tr>
+        {% for role in roles %}
+        <tr>
+        <td><a href ="{{ url_for('edit_role' , id= role.id) }}">{{ role.name }}</a></th>
+        </td>
+        <td>{{ role.manager }}</td>
+        <td>{{ role.is_active }}</td>
+        <td><a data-target="#confirm-restore" data-toggle="modal" data-href="{{ url_for('restore_role', id = role.id) }} "><img title="Restore" src="{{ url_for('static', filename='img/restore.png') }}" style="width:20px;height:20px;" alt="Restore"/> </a>
+
+        </td>
+        {% endfor %}
+        </table>
+        </div>
+        <a href= {{ url_for('add_role') }} class='btn btn-success'> Add Roles </a>
+    </div>
+<div class="modal fade" id="confirm-restore" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Restore</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>You are about to restore one record, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                    <p class="debug-url"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <a class="btn  btn-success btn-ok">Restore</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(document).ready(function() {
+  $('#confirm-restore').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+});
+</script>
+{% endblock %}

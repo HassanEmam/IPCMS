@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}
+Constology - Projects
+{% endblock %}
+
+
+{% block content %}
+
+<div class ="col-md-6">
+        <h1>Contact Us</h1>
+        
+        {% include '_flashmessages.html' %}
+        
+  {% from '_formhelpers.html' import render_field %}
+  <form action="{{ url_for('contact') }}" method=post>
+    {{ form.hidden_tag() }}
+ 
+
+    {{ render_field(form.name, class="form-control") }}
+
+    {{ render_field(form.email, class="form-control") }}
+
+    {{ render_field(form.subject, class="form-control") }}
+
+    {{ render_field(form.message, class="form-control") }}
+ 
+    {{ form.submit }}
+    
+  </form>
+{% endblock %}

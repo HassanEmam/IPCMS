@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %} Occult - Registeration {% endblock %}
+{% block content %}
+
+    <div class="col-md-4">
+        <h3> User Details Form</h3>
+        
+        {% include '_flashmessages.html' %}
+        
+        {% from "_formhelpers.html" import render_field %}
+        {% if action=='new' %}<form method="POST" action ={{ url_for('register') }} role ="form">
+        {% else %}<form method="POST" action="{{ url_for('edit_user', id= user.id) }}" role="form">
+        {% endif %}
+        {{ form.hidden_tag() }}
+        <h4> User Details</h4>
+        {{ render_field(form.firstname, class="form-control") }}
+        {{ render_field(form.lastname, class='form-control') }}
+        {{ render_field(form.username, class='form-control') }}
+        {{ render_field(form.email, class='form-control') }}
+        {% if action=='new' %}
+          {{ render_field(form.password, class='form-control') }}
+          {{ render_field(form.confirm, class='form-control') }}
+        {% endif %}
+        {% if session.get('is_admin')==True %}
+          {{ render_field(form.is_admin, class='form-control') }}
+          {{ render_field(form.is_active, class='form-control') }}
+        {% endif %}
+        <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
+
+{% endblock %}

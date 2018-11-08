@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Constology - Projects
+{% endblock %}
+
+{% block content %}
+
+    <div class ="col-md-8" min-height="100%">
+        <h1>{{ title }}</h1>
+
+        {% include '_flashmessages.html' %}
+        <div style="overflow-x:auto; min-height:100em" class="align-middle">
+            {% if tasks %}
+            <table class="table table-hover table-responsive table-dark">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Task Code</th>
+                        <th>Task Name</th>
+                    </tr>
+                </thead>
+                {% for t in tasks %}
+                    <tr>
+                        <td>{{ t.task_code }}</td>
+                        <td>{{ t.task_name }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <div class="panel panel-default">
+                    <div class="panel-body"> There are no current tasks to display</div>
+            {% endif %}
+        </div>
+    </div>
+
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>You are about to delete one record, this procedure is irreversible.</p>
+                    <p>Do you want to proceed?</p>
+                    <p class="debug-url"></p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger btn-ok">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$(document).ready(function() {
+  $('#confirm-delete').on('show.bs.modal', function(e) {
+    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+  });
+});
+</script>
+{% endblock %}

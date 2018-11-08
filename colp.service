@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve myproject
+After=network.target
+
+[Service]
+User=hemam
+Group=www-data
+WorkingDirectory=/home/hemam/colp
+Environment="PATH=/home/hemam/venv/bin"
+ExecStart=/home/hemam/venv/bin/uwsgi --ini colp.ini
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}
+Constology - Send Message
+
+<style>
+    .multipleInput-container {
+     border:1px #999 solid;
+     padding:1px;
+     padding-bottom:0;
+     cursor:text;
+     font-size:15px;
+     width:100%;
+	border-radius: 6px
+}
+
+.multipleInput-container input {
+    font-size:15px;
+    clear:both;
+    height:60px;
+    border:0;
+    margin-bottom:1px;
+}
+
+.multipleInput-container ul {
+    list-style-type:none;
+}
+
+li.multipleInput-email {
+    float:left;
+    padding:6px ;
+    color: #fff;
+	background: #FD9160;
+	margin-top: 0;
+	border-radius: 6px;
+	margin: 6px 2px 6px 6px;
+}
+
+.multipleInput-close {
+    width:16px;
+    height:16px;
+    display:block;
+    float:right;
+    margin: -2px 0px 0px 8px;
+	color: #fff;
+	font-size: 16px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+    <h1>Send Message to {{ recipient }}</h1>
+    <div class="row">
+        {% from '_formhelpers.html' import render_field %}
+        {% include '_flashmessages.html' %}
+        {% from '_formhelpers.html' import render_field_nolabel %}
+        <form method="POST" action ={{ url_for('sendmessage') }} role ="form">
+        <div class="col-md-4">
+            {% if not recipient %}
+            <div class = "ui-widget">
+                {{ render_field(form.to, class="form-control") }}
+            </div>
+            {% endif %}
+            {{ render_field(form.subject, class="form-control") }}
+            <span id="subrem"></span>
+            {{ render_field(form.message, class="form-control") }}
+            <span id="Remaining"> Max 255 characters</span><br><br>
+            {{ render_field_nolabel(form.submit, class="btn btn-success") }}
+        </div>
+        </form>
+    </div>
+
+<script>
+    $('#message').unbind('keyup change input paste').bind('keyup change input paste',function(e){
+    var $this = $(this);
+    var val = $this.val();
+    var valLength = val.length;
+    var maxCount = 255;
+    if((maxCount - valLength)>0){
+        $('#Remaining').css('color', 'blue');
+        $('#Remaining').text("remaining " + (maxCount - valLength));
+    }
+    if(valLength>=maxCount){
+        $this.val($this.val().substring(0,maxCount));
+        $('#Remaining').css('color', 'red');
+        $('#Remaining').text("You have reached the max limit for message ");
+        //alert("You have reached the limit for message length");
+    }
+});
+
+$('#subject').unbind('keyup change input paste').bind('keyup change input paste',function(e){
+    var $this = $(this);
+    var val = $this.val();
+    var valLength = val.length;
+    var maxCount = 100;
+    if((maxCount - valLength)>0){
+        $('#subrem').css('color', 'blue');
+        $('#subrem').text("remaining " + (maxCount - valLength));
+    }
+    if(valLength>=maxCount){
+        $this.val($this.val().substring(0,maxCount));
+        $('#subrem').css('color', 'red');
+        $('#subrem').text("You have reached the max limit for message ");
+        //alert("You have reached the limit for message length");
+    }
+});
+
+
+// (function( $ ){
+
+//      $.fn.multipleInput = function() {
+
+//           return this.each(function() {
+
+//               // create html elements
+
+//               // list of email addresses as unordered list
+//               $list = $('<ul />');
+
+//               // input
+//               var $input = $('<input type="text" />').keyup(function(event) {
+
+//                     if(event.which == 32 || event.which == 188) {
+//                          // key press is space or comma
+//                         var val = $(this).val().slice(0, -1); // remove space/comma from value
+
+//                          // append to list of emails with remove button
+//                          $list.append($('<li class="multipleInput-email"><span> ' + val + '</span></li>')
+//                               .append($('<a href="#" class="multipleInput-close" title="Remove">x</a>')
+//                                   .click(function(e) {
+//                                         $(this).parent().remove();
+//                                         e.preventDefault();
+//                                   })
+//                               )
+//                          );
+//                          $(this).attr('placeholder', '');
+//                          // empty input
+//                          $(this).val('');
+//                     }
+
+//               });
+
+//               // container div
+//               var $container = $('<div class="multipleInput-container" />').click(function() {
+//                     $input.focus();
+//               });
+
+//               // insert elements into DOM
+//               $container.append($list).append($input).insertAfter($(this));
+
+//               // add onsubmit handler to parent form to copy emails into original input as csv before submitting
+//               var $orig = $(this);
+//               $(this).closest('form').submit(function(e) {
+
+//                     var emails = new Array();
+//                     $('.multipleInput-email span').each(function() {
+//                          emails.push($(this).html());
+//                     });
+//                     emails.push($input.val());
+
+//                     $orig.val(emails.join());
+
+//               });
+
+//               return $(this).hide();
+
+//           });
+
+//      };
+// })( jQuery );
+
+// $('#to').multipleInput();
+
+</script>
+{% endblock %}
