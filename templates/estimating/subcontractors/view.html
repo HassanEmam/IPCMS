@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Constology - companys
+Constology - subcontractors
 {% endblock %}
 
 {% block content %}
 
     <div class="col-md-10">
-        <h3> companys List</h3>
+        <h3> subcontractors List</h3>
         
         {% include '_flashmessages.html' %}
         <div style="overflow-x:auto;">
@@ -15,26 +15,26 @@ Constology - companys
          <tr>
         <th padding=5>Name</th>
         <th>Description</th>
-        <th>Start</th>
-        <th>Finish</th>
+        <th>Contact Person</th>
+        <th>Number</th>
         <th>Actions</th>
         </tr>
         
-        {% for company in companies %}
+        {% for subcontractor in subcontractors %}
         <tr>
-            <td><a href ="/view_company/{{ company.id }}">{{ company.name }}</a></td>
-            <td>{{ company.description }}</td>
-            <td>{{ company.contact_person }}</td>
-            <td>{{ company.contact_number }} </td>
+            <td><a href ="/view_subcontractor/{{ subcontractor.id }}">{{ subcontractor.name }}</a></td>
+            <td>{{ subcontractor.description }}</td>
+            <td>{{ subcontractor.contact_person }}</td>
+            <td>{{ subcontractor.contact_number }} </td>
             <td>
-            <a data-target="#confirm-delete" data-toggle="modal" data-href="{{ url_for('delete_company', id = company.id) }} "><img title="Delete" src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
-            <a href="{{ url_for('edit_company', id = company.id) }} "><img title="Edit" src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
+            <a data-target="#confirm-delete" data-toggle="modal" data-href="{{ url_for('delete_subcontractor', id = subcontractor.id) }} "><img title="Delete" src="{{ url_for('static', filename='img/delete.png') }}" style="width:20px;height:20px;" alt="Delete"/> </a>
+            <a href="{{ url_for('edit_subcontractor', id = subcontractor.id) }} "><img title="Edit" src="{{ url_for('static', filename='img/edit.png') }}" style="width:20px;height:20px;" alt="Edit"/> </a>
             </td>
         </tr>
         {% endfor %}
         </table>
         </div>
-        <a href= "{{ url_for('new_company') }}" class='btn btn-success'> Add company </a>
+        <a href= "{{ url_for('new_subcontractor') }}" class='btn btn-success'> Add subcontractor </a>
     </div>
 <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">

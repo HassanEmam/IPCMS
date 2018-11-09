@@ -13,7 +13,7 @@ class CompanyForm(Form):
         return Subcontractor.query
 
     code = StringField('Code', [validators.Required()])
-    name= StringField('Project Name', [validators.Required()])
+    name= StringField('Company Name', [validators.Required()])
     description = TextAreaField ('Description', [validators.Required()])
     address = TextAreaField('Adress', [validators.Required()])
     contact_person = StringField('Contact Person', [validators.Required()])

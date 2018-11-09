@@ -24,8 +24,7 @@ def new_subcontractor():
                                     address=form.address.data,
                                     contact_number= form.contact_number.data,
                                     contact_person= form.contact_person.data,
-                                    organisation = org,
-                                    subcontractor = form.subcontractor.data)
+                                    organisation = org)
                 db.session.add(subcontractor)
                 db.session.flush()
                 db.session.commit()
@@ -43,7 +42,8 @@ def new_subcontractor():
 @login_required
 def view_subcontractors():
     if session.get('user_id'):
-        subcontractors=Subcontractor.query.filter_by(org_id= session['organisation_id'], status=True).all()
+        subcontractors= Subcontractor.query.filter_by(org_id= session['organisation_id'], status=True).all()
+        print(subcontractors, session['organisation_id'])
         return render_template('estimating/subcontractors/view.html', subcontractors=subcontractors, organisation = Organisation.query.filter_by(id=session['organisation_id']).first())
 
 @app.route('/view_subcontractor/<id>')
@@ -53,10 +53,11 @@ def subcontractor_details(id):
     return render_template('estimating/subcontractors/details.html', subcontractor=subcontractor)
 
 
-@app.route('/delete/<id>')
+@app.route('/delete_subcontractor/<id>')
 @admin_required
 def delete_subcontractor(id):
     subcontractor = Subcontractor.query.filter_by(id=id).first()
+    print(subcontractor)
     subcontractor.status=False
     db.session.add(subcontractor)
     db.session.commit()
@@ -76,8 +77,6 @@ def edit_subcontractor(id):
         subcontractor.contact_person = form.contact_person.data
         subcontractor.address = form.address.data
         subcontractor.contact_number = form.contact_number.data
-        subcontractor.subcontractor = form.subcontractor.data
-
         db.session.add(subcontractor)
         db.session.flush()
         db.session.commit()

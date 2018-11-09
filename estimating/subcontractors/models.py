@@ -27,7 +27,7 @@ class Subcontractor(db.Model):
 		self.name = name
 		self.description = description
 		self.address = address
-		self.constact_person = contact_person
+		self.contact_person = contact_person
 		self.contact_number = contact_number
 		self.org_id = organisation.id
 		

@@ -4,13 +4,9 @@ from wtforms import validators, StringField, TextAreaField, BooleanField, DateFi
 from flask import session
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 
-
-
-
 class SubcontractorForm(Form):
-
     code = StringField('Code', [validators.Required()])
-    name= StringField('Project Name', [validators.Required()])
+    name= StringField('Subcontractor Name', [validators.Required()])
     description = TextAreaField ('Description', [validators.Required()])
     address = TextAreaField('Adress', [validators.Required()])
     contact_person = StringField('Contact Person', [validators.Required()])
