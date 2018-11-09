@@ -27,3 +27,5 @@ from base.calendars import views
 from reporting import views
 from base.contact import views
 from base.messages import views
+from estimating.companies import views
+from estimating.subcontractors import views
