@@ -1,6 +1,6 @@
 import os
 
-SECRET_KEY= 'never-guess'
+SECRET_KEY= u'never-guess'
 SECURITY_PASSWORD_SALT = 'hard-to-guess'
 DEBUG = True
 DB_USER_NAME ='root'

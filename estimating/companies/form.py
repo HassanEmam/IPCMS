@@ -18,6 +18,6 @@ class CompanyForm(Form):
     address = TextAreaField('Adress', [validators.Required()])
     contact_person = StringField('Contact Person', [validators.Required()])
     contact_number = StringField('Contact Number', [validators.Required()])
-    subcontractor = QuerySelectField("Subcontractor", query_factory=companies, allow_blank=True)
+    # subcontractor = QuerySelectField("Subcontractor", query_factory=companies, allow_blank=True)
     status = BooleanField('Active', default=True)
 

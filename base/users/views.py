@@ -2,7 +2,7 @@ from IPCMS import app, db
 from flask import render_template, redirect, session, request, url_for, flash
 from base.users.form import RegisterForm, LoginForm, RoleForm, UserProjectForm
 from base.users.models import User, Role, UserLog
-# from users.token import generate_confirmation_token, confirm_token
+from base.users.token import generate_confirmation_token, confirm_token
 # from users.email import *
 from base.users.decorators import login_required, admin_required, organisation_required, project_required
 from base.organisations.models import Organisation
@@ -35,15 +35,12 @@ def confirm_account(token):
         flash('You have confirmed your account. Thanks!', 'alert-success')
     return redirect(url_for('login_success'))
 
-
-
 @app.route('/login', methods=('GET', 'POST'))
 def login():
     form = LoginForm()
     error = None
     if request.method == 'GET' and request.args.get('next'):
         session['next'] = request.args.get('next', None)
-
     if form.validate_on_submit():
         author = User.query.filter_by(
             username=form.username.data,
@@ -52,13 +49,11 @@ def login():
            ip = request.headers.getlist("X-Forwarded-For")[0]
         else:
            ip = request.remote_addr
-        print('ip', ip)
         if author:
             if bcrypt.checkpw(form.password.data.encode('utf-8'), author.password.encode('utf-8')) :
                 session['username'] = form.username.data
-                log = UserLog(user_id= str(author.id), ipaddr= str(ip), success=True)
+                log = UserLog(user_id=str(author.id), ipaddr=str(ip), success=True)
                 db.session.add(log)
-
                 db.session.commit()
                 session['user_id'] = author.id
                 org = Organisation.query.filter_by(id=author.organisation_id).first()
@@ -81,8 +76,6 @@ def login():
 
                 return redirect(url_for('login'))
         else:
-
-
             flash("Invalid login credentials",'alert-danger')
             return redirect(url_for('login'))
     return render_template('users/login.html', form=form, error=error)

@@ -1,13 +1,16 @@
-from colp import app, db
+from IPCMS import app, db
 
-from base.project import Project
-from base.users import User
-from flask import request, jsonify
+from base.project.models import Project
+from base.users.models import User
+from flask import request, jsonify, make_response, render_template, url_for
 from werkzeug.security import generate_password_hash
 from base.organisations.models import Organisation
 import jwt
 import datetime, bcrypt
 from functools import wraps
+
+
+
 
 def token_required(f):
     @wraps(f)
@@ -19,7 +22,7 @@ def token_required(f):
             return jsonify({"message": "Token is missing"}), 401
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = User.query.filter_by(id = data['id']).first()
+            current_user = User.query.filter_by(id=data['id']).first()
         except:
             return jsonify({'message': 'Token is invalid'}), 401
         return f(current_user, *args, **kwargs)
@@ -36,6 +39,12 @@ def api_get_projects(current_user):
         entity ={"id":project.id, "projectname": project.name}
         result.append(entity)
     return jsonify(result)
+
+
+@app.route('/api')
+def api():
+    return render_template('api/index.html')
+
 
 @app.route('/api/users', methods=['GET'])
 @token_required
@@ -57,17 +66,17 @@ def api_users(current_user):
 
 @app.route('/api/user/<id>', methods=['GET'])
 @token_required
-def api_get_user(current_user, id):
-    if not current_user.is_admin:
-        return jsonify({"message": 'Cannot perform that function!'})
+def api_get_user(id):
+    # if not current_user.is_admin:
+    #     return jsonify({"message": 'Cannot perform that function!'})
     user = User.query.filter_by(id = id).first()
     if not user:
         return jsonify({"message": "User not found"})
-    user_detail = {"first name" : user.firstname,
+    user_detail = {"first name": user.firstname,
                     "last name": user.lastname,
                     "email": user.email,
                     "admin": user.is_admin}
-    return jsonify({'user':user_detail})
+    return jsonify({'user': user_detail})
 
 @app.route('/api/user/<id>', methods=['PUT'])
 @token_required
@@ -113,12 +122,14 @@ def api_add_user(current_user):
 @app.route('/api/login', methods=['POST'])
 def api_login():
     auth = request.authorization
+    salt = bcrypt.gensalt()
     if not auth or not auth.username or not auth.password:
-        return make_respone('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-    user = User.query.filter_by(username = auth.username).first()
+        return make_response('Could not verify 1', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+    user = User.query.filter_by(username=auth.username).first()
     if not user:
-        return make_respone('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
-    if bcrypt.hashpw(auth.password, user.password) == user.password:
-        token = jwt.encode({'id':user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        return make_response('Could not verify 2', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+    if bcrypt.hashpw(auth.password.encode('utf-8'), user.password.encode('utf-8')) == user.password.encode('utf-8'):
+        token = jwt.encode({'id': user.id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
         return jsonify({'token': token.decode('UTF-8')}), 201, {'Access-Control-Allow-Origin': '*'}
-    return make_respone('Could not verify', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})
+    print(user.password.encode('utf-8'), '\n', bcrypt.hashpw(auth.password.encode('utf-8'), bcrypt.gensalt()))
+    return make_response('Could not verify 3', 401, {'WWW-Authenticate': 'Basic realm="Login required!"'})

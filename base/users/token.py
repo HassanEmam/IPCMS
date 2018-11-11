@@ -2,7 +2,7 @@
 
 from itsdangerous import URLSafeTimedSerializer
 
-from colp import app
+from IPCMS import app
 
 
 def generate_confirmation_token(email):
