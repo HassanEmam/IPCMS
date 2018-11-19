@@ -2,6 +2,7 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask.ext.migrate import Migrate
 from flask_mail import Mail
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config.from_object('settings')
@@ -12,6 +13,7 @@ app.config["MAIL_USE_SSL"] = False
 app.config["MAIL_USERNAME"] = 'info@emamology.com'
 app.config["MAIL_PASSWORD"] = 'Hassan81'
 mail = Mail(app)
+CORS(app)
 
 #Migration
 migrate= Migrate(app, db)

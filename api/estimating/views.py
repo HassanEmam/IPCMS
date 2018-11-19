@@ -1,7 +1,9 @@
 from IPCMS import app, db
 from estimating.companies.models import Company
 from estimating.subcontractors.models import Subcontractor
+from estimating.rsrctypes.models import RSRCType
 from flask import jsonify
+from base.organisations.models import Organisation
 from base.users.models import User
 from base.users.decorators import *
 from api.view import *
@@ -33,11 +35,45 @@ from api.view import *
 #         flash(e, 'alert-danger')
 #     return render_template('estimating/companies/setup.html', form=form, action='new')
 
+@app.route('/api/viewresourcetypes')
+@token_required
+def api_view_resource_types(current_user):
+    result =[]
+    if session.get('organisation_id'):
+        types = RSRCType.query.filter_by(organisation_id=session['organisation_id'], is_active=True).all()
+    else:
+        print(current_user.organisation_id)
+        types = RSRCType.query.filter_by(organisation_id=current_user.organisation_id , is_active=True).all()
+    for s in types:
+        ser = dict()
+        ser['code'] = s.code
+        ser['name'] = s.name
+        ser['description'] = s.description
+        result.append(ser)
+    return jsonify({"resource_types": result})
+
+@app.route('/api/addesourcetype', methods=['POST'])
+@token_required
+def api_add_resource_types(current_user):
+    if not current_user.is_admin:
+        return jsonify({"message": 'Cannot perform that function!'})
+    if request.get_json():
+        print(request.get_json())
+        data = request.get_json()
+        print(data['code'], data['name'])
+        org = Organisation.query.filter_by(id= current_user.organisation_id).first()
+        rsrctype = RSRCType(name= data['name'],
+                            code= data['code'],
+                            description=data['description'],
+                            organisation=org)
+        db.session.add(rsrctype)
+        db.session.commit()
+        return jsonify({"message": "User has been created successfully"})
+    return jsonify({"message": "Error"})
 
 @app.route('/api/view_subcontractors')
 @token_required
 def api_view_subcontractors(current_user):
-    subcontractors = []
     result =[]
     if session.get('organisation_id'):
         subcontractors = Subcontractor.query.filter_by(org_id=session['organisation_id'], status=True).all()
