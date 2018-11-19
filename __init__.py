@@ -31,3 +31,4 @@ from estimating.companies import views
 from estimating.subcontractors import views
 from api import view
 from api.estimating import views
+from api.planning import views
